@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "*.asm": "asm-collection",
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "iostream": "cpp"
     }
 }
