@@ -1,3 +1,4 @@
+//Author: Marcin Wrzaskowski 160329
 #include <iostream>
 
 using namespace std;
@@ -18,7 +19,8 @@ struct Node {
 
 };
 
-Node* newNode(int key) {
+Node* newNode(int key) 
+{
     Node* node = new Node();
     node->key = key;
     node->left = nullptr;
@@ -27,19 +29,22 @@ Node* newNode(int key) {
     return node;
 }
 
-int height(Node* node) {
+int height(Node* node) 
+{
     if (node == nullptr)
         return 0;
     return node->height;
 }
 
-int getBalance(Node* node) {
+int getBalance(Node* node) 
+{
     if (node == nullptr)
         return 0;
     return height(node->left) - height(node->right);
 }
 
-Node* rightRotate(Node* y) {
+Node* rightRotate(Node* y) 
+{
     Node* x = y->left;
     Node* T2 = x->right;
 
@@ -52,7 +57,8 @@ Node* rightRotate(Node* y) {
     return x;
 }
 
-Node* leftRotate(Node* x) {
+Node* leftRotate(Node* x) 
+{
     Node* y = x->right;
     Node* T2 = y->left;
 
@@ -65,8 +71,8 @@ Node* leftRotate(Node* x) {
     return y;
 }
 
-Node* insertAVL(Node* node, int key) {
-
+Node* insertAVL(Node* node, int key) 
+{
     if (node == nullptr)
         return newNode(key);
 
@@ -99,7 +105,8 @@ Node* insertAVL(Node* node, int key) {
 
     return node;
 }
-Node* insertBST(Node* root, int key) {
+Node* insertBST(Node* root, int key) 
+{
     if (root == nullptr)
         return new Node(key);
 
@@ -110,7 +117,8 @@ Node* insertBST(Node* root, int key) {
 
     return root;
 }
-Node* constructBinarySearchTree(int arr[], int size) {
+Node* constructBinarySearchTree(int arr[], int size) 
+{
     Node* root = nullptr;
 
     for (int i = 0; i < size; i++) {
@@ -146,27 +154,42 @@ void findMin(Node *root)
 void inOrder(Node* root) {
     if (root == nullptr)
         return;
-    inOrder(root->left);
-    cout << root->key << ", ";
-    inOrder(root->right);
+
+    if(root != nullptr)
+    {
+        inOrder(root->left);
+        cout << root->key << ", ";
+        inOrder(root->right);
+
+    }
 }
 void preOrder(Node* root) {
     if (root == nullptr)
         return;
 
-    cout << root->key << ", ";
+    if(root != nullptr)
+    {
 
-    preOrder(root->left);
-    preOrder(root->right);
+        cout << root->key << ", ";
+
+        preOrder(root->left);
+        preOrder(root->right);
+
+    }
+
 }
 void postOrder(Node* root) {
     if (root == nullptr)
         return;
 
-    postOrder(root->left);
-    postOrder(root->right);
+    if(root != nullptr)
+    {
+        postOrder(root->left);
+        postOrder(root->right);
 
-    cout << root->key << ", ";
+        cout << root->key << ", ";
+
+    }
 }
 
 void print(Node *root)
@@ -217,13 +240,57 @@ string exportTree(Node *root)
     return " node " + to_string(root->key) + " \\" + l_str + "\\" + r_str + "\\";
 
 }
-void removeKeys(Node *root, int key)
+Node* findMinInBinary(Node* root) {
+    while (root->left != nullptr)
+        root = root->left;
+    return root;
+}
+Node* removeKey(Node* root, int key) {
+    if (root == nullptr)
+        return root;
+
+    if (key < root->key)
+        root->left = removeKey(root->left, key);
+    else if (key > root->key)
+        root->right = removeKey(root->right, key);
+    else {
+        if (root->left == nullptr && root->right == nullptr) {
+            delete root;
+            root = nullptr;
+        }
+        else if (root->left == nullptr) {
+            Node* temp = root;
+            root = root->right;
+            delete temp;
+        }
+        else if (root->right == nullptr) {
+            Node* temp = root;
+            root = root->left;
+            delete temp;
+        }
+        else {
+            Node* temp = findMinInBinary(root->right);
+            root->key = temp->key;
+            root->right = removeKey(root->right, temp->key);
+        }
+    }
+    return root;
+}
+void deleteAllNodes(Node *root)
 {
+    if(root == nullptr)
+        return;
+
+    deleteAllNodes(root->left);
+    deleteAllNodes(root->right);
+
+    delete root;
 
 }
 
 int main(int argc, char *argv[])
 {
+    //Driver code for tests
 
     Node *root = nullptr;
 
@@ -234,24 +301,32 @@ int main(int argc, char *argv[])
     root = insertAVL(root, 50);
     root = insertAVL(root, 25);
 
-    inOrder(root);
-
     findMinMax(root);
 
     print(root);
 
-    cout<<exportTree(root)<<endl;
+    removeKey(root, 10);
+    removeKey(root, 25);
+
+    print(root);
 
     delete root;
 
     int numbers[] = {50, 30, 20, 40, 70, 60, 80};
     int size = sizeof(numbers) / sizeof(numbers[0]);
 
-    /*Node *bst = constructBinarySearchTree(numbers, size);
+    Node *bst = constructBinarySearchTree(numbers, size);
 
     cout<<endl;
 
-    inOrder(bst);*/
+    print(bst);
+
+    removeKey(bst, 50);
+    removeKey(bst, 40);
+
+    deleteAllNodes(bst);
+
+    print(bst);
 
     string action = "action";
     string command = "";
