@@ -1,5 +1,9 @@
 //Author: Marcin Wrzaskowski 160329
 #include <iostream>
+#include <math.h>
+#include <vector>
+#include <stdlib.h>
+#include <string>
 
 using namespace std;
 
@@ -287,12 +291,75 @@ void deleteAllNodes(Node *root)
     delete root;
 
 }
+int treeToList(Node *root)
+{
+    int count = 0;
+ 
+    Node* temp = root->right;
+ 
+    while (temp) 
+    {     
+        if (temp->left) 
+        {
+            Node* oldTmp0 = temp;
+            temp = temp->left;
+            oldTmp0->left = temp->right;
+            temp->right = oldTmp0;
+            root->right = temp;
+        }
+        else 
+        {
+            count++;
+            root = temp;
+            temp = temp->right;
+        }
+
+    }
+ 
+    return count;
+    
+}
+void compress(Node *root, int m)
+{
+    Node* temp = root->right;
+ 
+    for (int i = 0; i < m; i++) 
+    {
+        Node* oldTemp = temp;
+        temp = temp->right;
+        root->right = temp;
+        oldTemp->right = temp->left;
+        temp->left = oldTemp;
+        root = temp;
+        temp = temp->right;
+    }
+}
+Node* balanceTree(Node* root)
+{
+    Node* root0 = new Node(0);
+ 
+    root0->right = root;
+ 
+    int count = treeToList(root0);
+
+    int height = log2(count + 1);
+ 
+    int m = pow(2, height) - 1;
+ 
+    compress(root0, count - m);
+
+    for (m = m / 2; m > 0; m /= 2) {
+        compress(root0, m);
+    }
+ 
+    return root0->right;
+}
 
 int main(int argc, char *argv[])
 {
     //Driver code for tests
 
-    Node *root = nullptr;
+    /*Node *root = nullptr;
 
     root = insertAVL(root, 10);
     root = insertAVL(root, 20);
@@ -307,6 +374,10 @@ int main(int argc, char *argv[])
 
     removeKey(root, 10);
     removeKey(root, 25);
+
+    print(root);
+
+    balanceTree(root);
 
     print(root);
 
@@ -326,20 +397,112 @@ int main(int argc, char *argv[])
 
     deleteAllNodes(bst);
 
-    print(bst);
+    print(bst);*/
 
-    string action = "action";
-    string command = "";
-
-    /*while(true)
+    if((string)argv[1] == "--tree")
     {
-        cout<<action<<">";
-        cin>>command;
 
-        if(command == "Exit")
+        Node *root = nullptr;
+
+        if((string)argv[2] == "AVL") 
+        {
+            int numberOfNodes = 0;
+            int *n;
+            int *nodes;
+            string insert;
+
+            cout<<"node>";
+            cin>>numberOfNodes;
+
+            cout<<numberOfNodes<<endl;
+
+            nodes = new int[numberOfNodes];
+
+            n = nodes;
+
+            cout<<"insert>";
+            getline(cin >> ws, insert);
+            
+            string value = "";
+            int it = 0;
+
+            for(int i = 0; i < insert.length(); i++)
+            {
+                if(insert[i] != ' ')
+                {
+                    value = insert[i];
+
+                    if(value != " ")
+                    {
+                        nodes[it] = stoi(value);
+
+                        it += 1;
+
+                    }
+                }
+
+            }
+
+            for(int i = 0; i < numberOfNodes; i++)
+            {
+                root = insertAVL(root, nodes[i]);
+
+            }
+
+        }
+        else if((string)argv[2] == "BST")
+        {
+            int key = 0;
+
+            vector<int> numbers;
+            int *ptr;
+            int *arr;
+
+            while(cin >> key)
+            {
+                numbers.push_back(key);
+
+            }
+
+            arr = new int[numbers.size()];
+
+            ptr = arr;
+
+            for(int &i : numbers)
+            {
+                *ptr = i;
+                ptr++;
+
+            }
+
+            root = constructBinarySearchTree(arr, numbers.size());
+
+        }
+        else
+        {
+            cout<<"Error"<<endl;
+
             return 0;
+        }
 
-    }*/
+        string action = "action";
+        string command = "";
+
+        while(true)
+        {
+            cout<<action<<">";
+            cin>>command;
+
+            if(command == "Print")
+                print(root);
+            if(command == "Exit")
+                return 0;
+
+        }
+
+    }
+    else
+        cout<<"Error"<<endl;
 
     return 0;
 }
