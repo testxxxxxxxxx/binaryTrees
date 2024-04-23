@@ -401,10 +401,65 @@ int main(int argc, char *argv[])
 
     if((string)argv[1] == "--tree")
     {
-
         Node *root = nullptr;
 
         if((string)argv[2] == "AVL") 
+        {
+            int numberOfNodes = 0;
+            int *n;
+            int *nodes;
+            string insert;
+
+            cout<<"node>";
+            cin>>numberOfNodes;
+
+            cout<<numberOfNodes<<endl;
+
+            nodes = new int[numberOfNodes];
+
+            n = nodes;
+
+            cout<<"insert>";
+            getline(cin >> ws, insert);
+            
+            string value = "";
+            int it = -1;
+
+            for(int i = 0; i < insert.length(); i++)
+            {
+                if(insert[i] != ' ')
+                {
+                    value += insert[i];
+                }
+                else
+                {
+                    it += 1;
+
+                    nodes[it] = stoi(value);
+
+                    value = "";
+                }
+
+                if(i == insert.length() - 1 && insert[i] != ' ')
+                {
+                    it += 1;
+
+                    nodes[it] = stoi(value);
+
+                    value = "";
+                    
+                }
+
+            }
+
+            for(int i = 0; i < numberOfNodes; i++)
+            {
+                root = insertAVL(root, nodes[i]);
+
+            }
+
+        }
+        else if((string)argv[2] == "BST")
         {
             int numberOfNodes = 0;
             int *n;
@@ -430,52 +485,20 @@ int main(int argc, char *argv[])
             {
                 if(insert[i] != ' ')
                 {
-                    value = insert[i];
+                    value += insert[i];
+                }
+                else
+                {
+                    nodes[it] = stoi(value);
 
-                    if(value != " ")
-                    {
-                        nodes[it] = stoi(value);
+                    it += 1;
 
-                        it += 1;
-
-                    }
+                    value = "";
                 }
 
             }
 
-            for(int i = 0; i < numberOfNodes; i++)
-            {
-                root = insertAVL(root, nodes[i]);
-
-            }
-
-        }
-        else if((string)argv[2] == "BST")
-        {
-            int key = 0;
-
-            vector<int> numbers;
-            int *ptr;
-            int *arr;
-
-            while(cin >> key)
-            {
-                numbers.push_back(key);
-
-            }
-
-            arr = new int[numbers.size()];
-
-            ptr = arr;
-
-            for(int &i : numbers)
-            {
-                *ptr = i;
-                ptr++;
-
-            }
-
-            root = constructBinarySearchTree(arr, numbers.size());
+            root = constructBinarySearchTree(nodes, numberOfNodes);
 
         }
         else
