@@ -9,6 +9,7 @@ using namespace std;
 
 int maxValue = 0; 
 int minValue = 0;
+bool removed = false;
 
 struct Node {
     int key;
@@ -199,13 +200,16 @@ void postOrder(Node* root) {
 void print(Node *root)
 {
     cout<<"In-order: ";
-    inOrder(root);
+    if(!removed)
+        inOrder(root);
     cout<<endl;
     cout<<"Post-order: ";
-    postOrder(root);
+    if(!removed)
+        postOrder(root);
     cout<<endl;
     cout<<"Pre-order: ";
-    preOrder(root);
+    if(!removed)
+        preOrder(root);
     cout<<endl;
 
 }
@@ -216,8 +220,18 @@ void findMinMax(Node *root)
     maxValue = 0;
     minValue = root->key;
 
-    findMax(root);
-    findMin(root);
+    if(!removed)
+    {
+        findMax(root);
+        findMin(root);
+
+    }
+    else
+    {
+        minValue = 0;
+        maxValue = 0;
+
+    }
 
     cout<<"min: "<<minValue<<endl;
     cout<<"max: "<<maxValue<<endl;
@@ -289,7 +303,6 @@ void deleteAllNodes(Node *root)
     deleteAllNodes(root->right);
 
     delete root;
-
 }
 int treeToList(Node *root)
 {
@@ -399,160 +412,61 @@ int main(int argc, char *argv[])
 
     print(bst);*/
 
-    if((string)argv[1] == "--tree")
-    {
-        int numberOfNodes = 0;
+    cout<<argv[1]<<endl;
+    cout<<argv[2]<<endl;
 
-        Node *root = nullptr;
+    //if(argv[1] == "--tree")
+    //{
+        cout<<"test"<<endl;
 
-        if((string)argv[2] == "AVL") 
+        if((string)argv[1] == "--tree")
         {
             int numberOfNodes = 0;
-            int *n;
-            int *nodes;
-            string insert;
 
-            cout<<"node>";
-            cin>>numberOfNodes;
+            Node *root = nullptr;
 
-            cout<<numberOfNodes<<endl;
-
-            nodes = new int[numberOfNodes];
-
-            n = nodes;
-
-            cout<<"insert>";
-            getline(cin >> ws, insert);
-            
-            string value = "";
-            int it = -1;
-
-            for(int i = 0; i < insert.length(); i++)
+            if((string)argv[2] == "AVL") 
             {
-                if(insert[i] != ' ')
-                {
-                    value += insert[i];
-                }
-                else
-                {
-                    it += 1;
+                int numberOfNodes = 0;
+                int *n;
+                int *nodes;
+                string insert;
 
-                    nodes[it] = stoi(value);
+                cout<<"node>";
+                cin>>numberOfNodes;
 
-                    value = "";
-                }
+                cout<<numberOfNodes<<endl;
 
-                if(i == insert.length() - 1 && insert[i] != ' ')
-                {
-                    it += 1;
+                nodes = new int[numberOfNodes];
 
-                    nodes[it] = stoi(value);
+                n = nodes;
 
-                    value = "";
-                    
-                }
-
-            }
-
-            for(int i = 0; i < numberOfNodes; i++)
-            {
-                root = insertAVL(root, nodes[i]);
-
-            }
-
-        }
-        else if((string)argv[2] == "BST")
-        {
-            int *n;
-            int *nodes;
-            string insert;
-
-            cout<<"node>";
-            cin>>numberOfNodes;
-
-            cout<<numberOfNodes<<endl;
-
-            nodes = new int[numberOfNodes];
-
-            n = nodes;
-
-            cout<<"insert>";
-            getline(cin >> ws, insert);
-            
-            string value = "";
-            int it = -1;
-
-            for(int i = 0; i < insert.length(); i++)
-            {
-                if(insert[i] != ' ')
-                {
-                    value += insert[i];
-                }
-                else
-                {
-                    it += 1;
-
-                    nodes[it] = stoi(value);
-
-                    value = "";
-                }
-
-                if(i == insert.length() - 1 && insert[i] != ' ')
-                {
-                    it += 1;
-
-                    nodes[it] = stoi(value);
-
-                    value = "";
-                    
-                }
-
-            }
-
-            root = constructBinarySearchTree(nodes, numberOfNodes);
-
-        }
-        else
-        {
-            cout<<"Error"<<endl;
-
-            return 0;
-        }
-
-        string action = "action";
-        string command = "";
-
-        while(true)
-        {
-            cout<<action<<">";
-            cin>>command;
-
-            if(command == "Print")
-                print(root);
-            if(command == "Remove")
-            {
-                string nodesToRemove = "";
+                cout<<"insert>";
+                getline(cin >> ws, insert);
+                
                 string value = "";
+                int it = -1;
 
-                cout<<"remove>";
-                getline(cin >> ws, nodesToRemove);
-
-                for(int i = 0; i < nodesToRemove.length(); i++)
+                for(int i = 0; i < insert.length(); i++)
                 {
-                    if(nodesToRemove[i] != ' ')
+                    if(insert[i] != ' ')
                     {
-                        value += nodesToRemove[i];
+                        value += insert[i];
                     }
                     else
                     {
-                        removeKey(root, stoi(value));
+                        it += 1;
+
+                        nodes[it] = stoi(value);
 
                         value = "";
                     }
 
-                    if(i == nodesToRemove.length() - 1 && nodesToRemove[i] != ' ')
+                    if(i == insert.length() - 1 && insert[i] != ' ')
                     {
-                        removeKey(root, stoi(value));
+                        it += 1;
+
+                        nodes[it] = stoi(value);
 
                         value = "";
                         
@@ -560,15 +474,163 @@ int main(int argc, char *argv[])
 
                 }
 
+                for(int i = 0; i < numberOfNodes; i++)
+                {
+                    root = insertAVL(root, nodes[i]);
+
+                }
+
             }
-            if(command == "Exit")
+            else if((string)argv[2] == "BST")
+            {
+                int *n;
+                int *nodes;
+                string insert;
+
+                cout<<"node>";
+                cin>>numberOfNodes;
+
+                cout<<numberOfNodes<<endl;
+
+                nodes = new int[numberOfNodes];
+
+                n = nodes;
+
+                cout<<"insert>";
+                getline(cin >> ws, insert);
+                
+                string value = "";
+                int it = -1;
+
+                for(int i = 0; i < insert.length(); i++)
+                {
+                    if(insert[i] != ' ')
+                    {
+                        value += insert[i];
+                    }
+                    else
+                    {
+                        it += 1;
+
+                        nodes[it] = stoi(value);
+
+                        value = "";
+                    }
+
+                    if(i == insert.length() - 1 && insert[i] != ' ')
+                    {
+                        it += 1;
+
+                        nodes[it] = stoi(value);
+
+                        value = "";
+                        
+                    }
+
+                }
+
+                root = constructBinarySearchTree(nodes, numberOfNodes);
+
+            }
+            else
+            {
+                cout<<"Error"<<endl;
+
                 return 0;
+            }
+
+            string action = "action";
+            string command = "";
+
+            while(true)
+            {
+                cout<<action<<">";
+                cin>>command;
+
+                if(command == "Help")
+                {
+                    cout<<"Help"<<"                     "<<"Show this message"<<endl;
+                    cout<<"FindMinMax"<<"                     "<<"Show this message"<<endl;
+                    cout<<"Print"<<"                     "<<"Show this message"<<endl;
+                    cout<<"Remove"<<"                     "<<"Show this message"<<endl;
+                    cout<<"Delete"<<"                     "<<"Show this message"<<endl;
+                    cout<<"Export"<<"                     "<<"Show this message"<<endl;
+                    cout<<"Rebalance"<<"                     "<<"Show this message"<<endl;
+                    cout<<"Exit"<<"                     "<<"Show this message"<<endl;
+
+                }
+                if(command == "Print")
+                    print(root);
+                if(command == "Remove")
+                {
+                    string nodesToRemove = "";
+                    string value = "";
+
+                    cout<<"remove>";
+                    getline(cin >> ws, nodesToRemove);
+
+                    for(int i = 0; i < nodesToRemove.length(); i++)
+                    {
+                        if(nodesToRemove[i] != ' ')
+                        {
+                            value += nodesToRemove[i];
+                        }
+                        else
+                        {
+                            removeKey(root, stoi(value));
+
+                            value = "";
+                        }
+
+                        if(numberOfNodes < 0)
+                            removed = true;
+
+                        if(i == nodesToRemove.length() - 1 && nodesToRemove[i] != ' ' && !removed)
+                        {
+                            removeKey(root, stoi(value));
+                            numberOfNodes--;
+
+                            value = "";
+                            
+                        }
+
+                    }
+
+                }
+                if(command == "Delete")
+                {
+                    cout<<"Deleting: ";
+                    postOrder(root);
+
+                    deleteAllNodes(root);
+
+                    removed = true;
+
+                    cout<<endl;
+
+                    cout<<"Tree sucessfully removed"<<endl;
+
+                }
+                if(command == "FindMinMax")
+                    findMinMax(root);
+                if(command == "Export")
+                    cout<<exportTree(root)<<endl;
+                if(command == "Rebalance")
+                    root = balanceTree(root);
+                if(command == "Exit")
+                    return 0;
+
+            }
 
         }
+        else
+            cout<<"Error"<<endl;
 
-    }
-    else
-        cout<<"Error"<<endl;
+    //}
+    //else
+        //cout<<"Error"<<endl;
+
+    //TODO: Repair Remove command, repair args
 
     return 0;
 }
