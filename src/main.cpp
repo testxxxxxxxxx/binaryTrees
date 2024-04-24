@@ -401,6 +401,8 @@ int main(int argc, char *argv[])
 
     if((string)argv[1] == "--tree")
     {
+        int numberOfNodes = 0;
+
         Node *root = nullptr;
 
         if((string)argv[2] == "AVL") 
@@ -461,7 +463,6 @@ int main(int argc, char *argv[])
         }
         else if((string)argv[2] == "BST")
         {
-            int numberOfNodes = 0;
             int *n;
             int *nodes;
             string insert;
@@ -479,7 +480,7 @@ int main(int argc, char *argv[])
             getline(cin >> ws, insert);
             
             string value = "";
-            int it = 0;
+            int it = -1;
 
             for(int i = 0; i < insert.length(); i++)
             {
@@ -489,11 +490,21 @@ int main(int argc, char *argv[])
                 }
                 else
                 {
-                    nodes[it] = stoi(value);
-
                     it += 1;
 
+                    nodes[it] = stoi(value);
+
                     value = "";
+                }
+
+                if(i == insert.length() - 1 && insert[i] != ' ')
+                {
+                    it += 1;
+
+                    nodes[it] = stoi(value);
+
+                    value = "";
+                    
                 }
 
             }
@@ -518,6 +529,38 @@ int main(int argc, char *argv[])
 
             if(command == "Print")
                 print(root);
+            if(command == "Remove")
+            {
+                string nodesToRemove = "";
+                string value = "";
+
+                cout<<"remove>";
+                getline(cin >> ws, nodesToRemove);
+
+                for(int i = 0; i < nodesToRemove.length(); i++)
+                {
+                    if(nodesToRemove[i] != ' ')
+                    {
+                        value += nodesToRemove[i];
+                    }
+                    else
+                    {
+                        removeKey(root, stoi(value));
+
+                        value = "";
+                    }
+
+                    if(i == nodesToRemove.length() - 1 && nodesToRemove[i] != ' ')
+                    {
+                        removeKey(root, stoi(value));
+
+                        value = "";
+                        
+                    }
+
+                }
+
+            }
             if(command == "Exit")
                 return 0;
 
