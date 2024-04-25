@@ -4,6 +4,7 @@
 #include <vector>
 #include <stdlib.h>
 #include <string.h>
+#include <algorithm>
 
 using namespace std;
 
@@ -412,7 +413,7 @@ int main(int argc, char *argv[])
 
     print(bst);*/
 
-    if(!argv[1])
+    if(!argv[1] || !argv[2])
     {
         cout<<"Error"<<endl;
 
@@ -424,8 +425,6 @@ int main(int argc, char *argv[])
             int numberOfNodes = 0;
 
             Node *root = nullptr;
-
-            cout<<"test"<<endl;
 
             if(strcmp(argv[2], "AVL") == 0) 
             {
@@ -475,6 +474,17 @@ int main(int argc, char *argv[])
 
                 }
 
+                sort(nodes, nodes + numberOfNodes);
+
+                cout<<"sorted: ";
+                for(int i = 0; i < numberOfNodes; i++)
+                {
+                    cout<<nodes[i]<<" ";
+
+                }
+
+                cout<<endl;
+
                 for(int i = 0; i < numberOfNodes; i++)
                 {
                     root = insertAVL(root, nodes[i]);
@@ -505,7 +515,7 @@ int main(int argc, char *argv[])
 
                 for(int i = 0; i < insert.length(); i++)
                 {
-                    if(insert[i] != ' ' || insert[i] != ',')
+                    if(insert[i] != ' ' && insert[i] != ',')
                     {
                         value += insert[i];
                     }
@@ -518,17 +528,30 @@ int main(int argc, char *argv[])
                         value = "";
                     }
 
-                    if(i == insert.length() - 1 && insert[i] != ' ' || i == insert.length() - 1 && insert[i] != ',')
+                    if(i == insert.length() - 1 && insert[i] != ' ' && insert[i] != ',')
                     {
                         it += 1;
 
                         nodes[it] = stoi(value);
+
+                        cout<<it<<endl;
+                        cout<<nodes[it]<<endl;
 
                         value = "";
                         
                     }
 
                 }
+
+                cout<<"inserting: ";
+
+                for(int i = 0; i < numberOfNodes; i++)
+                {
+                    cout<<nodes[i]<<" ";
+
+                }
+
+                cout<<endl;
 
                 root = constructBinarySearchTree(nodes, numberOfNodes);
 
@@ -583,7 +606,7 @@ int main(int argc, char *argv[])
                         }
                         else
                         {
-                            removeKey(root, stoi(value));
+                            root = removeKey(root, stoi(value));
                             numberOfNodes--;
 
                             value = "";
@@ -593,7 +616,7 @@ int main(int argc, char *argv[])
 
                         if(i == nodesToRemove.length() - 1 && nodesToRemove[i] != ' ' && !removed)
                         {
-                            removeKey(root, stoi(value));
+                            root = removeKey(root, stoi(value));
                             numberOfNodes--;
 
                             value = "";
@@ -619,9 +642,9 @@ int main(int argc, char *argv[])
                 }
                 if(command == "FindMinMax")
                     findMinMax(root);
-                if(command == "Export")
+                if(command == "Export" && !removed)
                     cout<<exportTree(root)<<endl;
-                if(command == "Rebalance")
+                if(command == "Rebalance" && !removed)
                     root = balanceTree(root);
                 if(command == "Exit")
                     return 0;
@@ -632,7 +655,7 @@ int main(int argc, char *argv[])
         else
             cout<<"Error"<<endl;
 
-    //TODO: repair args, args from command line <<<
+    //TODO: args from command line <<<
 
     return 0;
 }
