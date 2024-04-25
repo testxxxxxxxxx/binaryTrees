@@ -371,48 +371,6 @@ Node* balanceTree(Node* root)
 
 int main(int argc, char *argv[])
 {
-    //Driver code for tests
-
-    /*Node *root = nullptr;
-
-    root = insertAVL(root, 10);
-    root = insertAVL(root, 20);
-    root = insertAVL(root, 30);
-    root = insertAVL(root, 40);
-    root = insertAVL(root, 50);
-    root = insertAVL(root, 25);
-
-    findMinMax(root);
-
-    print(root);
-
-    removeKey(root, 10);
-    removeKey(root, 25);
-
-    print(root);
-
-    balanceTree(root);
-
-    print(root);
-
-    delete root;
-
-    int numbers[] = {50, 30, 20, 40, 70, 60, 80};
-    int size = sizeof(numbers) / sizeof(numbers[0]);
-
-    Node *bst = constructBinarySearchTree(numbers, size);
-
-    cout<<endl;
-
-    print(bst);
-
-    removeKey(bst, 50);
-    removeKey(bst, 40);
-
-    deleteAllNodes(bst);
-
-    print(bst);*/
-
     if(!argv[1] || !argv[2])
     {
         cout<<"Error"<<endl;
@@ -484,6 +442,8 @@ int main(int argc, char *argv[])
                 }
 
                 cout<<endl;
+                
+                int m = 0;
 
                 for(int i = 0; i < numberOfNodes; i++)
                 {
@@ -654,8 +614,6 @@ int main(int argc, char *argv[])
         }
         else
             cout<<"Error"<<endl;
-
-    //TODO: args from command line <<<
 
     return 0;
 }
