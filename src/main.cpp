@@ -3,7 +3,7 @@
 #include <math.h>
 #include <vector>
 #include <stdlib.h>
-#include <string>
+#include <string.h>
 
 using namespace std;
 
@@ -412,22 +412,23 @@ int main(int argc, char *argv[])
 
     print(bst);*/
 
-    cout<<argv[1]<<endl;
-    cout<<argv[2]<<endl;
+    if(!argv[1])
+    {
+        cout<<"Error"<<endl;
 
-    //if(argv[1] == "--tree")
-    //{
-        cout<<"test"<<endl;
+        return 0;
+    }
 
-        if((string)argv[1] == "--tree")
+        if(strcmp(argv[1], "--tree") == 0)
         {
             int numberOfNodes = 0;
 
             Node *root = nullptr;
 
-            if((string)argv[2] == "AVL") 
+            cout<<"test"<<endl;
+
+            if(strcmp(argv[2], "AVL") == 0) 
             {
-                int numberOfNodes = 0;
                 int *n;
                 int *nodes;
                 string insert;
@@ -449,7 +450,7 @@ int main(int argc, char *argv[])
 
                 for(int i = 0; i < insert.length(); i++)
                 {
-                    if(insert[i] != ' ')
+                    if(insert[i] != ' ' && insert[i] != ',')
                     {
                         value += insert[i];
                     }
@@ -462,7 +463,7 @@ int main(int argc, char *argv[])
                         value = "";
                     }
 
-                    if(i == insert.length() - 1 && insert[i] != ' ')
+                    if(i == insert.length() - 1 && insert[i] != ' ' && insert[i] != ',')
                     {
                         it += 1;
 
@@ -481,7 +482,7 @@ int main(int argc, char *argv[])
                 }
 
             }
-            else if((string)argv[2] == "BST")
+            else if(strcmp(argv[2], "BST") == 0)
             {
                 int *n;
                 int *nodes;
@@ -504,7 +505,7 @@ int main(int argc, char *argv[])
 
                 for(int i = 0; i < insert.length(); i++)
                 {
-                    if(insert[i] != ' ')
+                    if(insert[i] != ' ' || insert[i] != ',')
                     {
                         value += insert[i];
                     }
@@ -517,7 +518,7 @@ int main(int argc, char *argv[])
                         value = "";
                     }
 
-                    if(i == insert.length() - 1 && insert[i] != ' ')
+                    if(i == insert.length() - 1 && insert[i] != ' ' || i == insert.length() - 1 && insert[i] != ',')
                     {
                         it += 1;
 
@@ -566,11 +567,16 @@ int main(int argc, char *argv[])
                     string nodesToRemove = "";
                     string value = "";
 
+                    cout<<"numberOfNodes: "<<numberOfNodes<<endl;
+
                     cout<<"remove>";
                     getline(cin >> ws, nodesToRemove);
 
                     for(int i = 0; i < nodesToRemove.length(); i++)
                     {
+                        if(numberOfNodes <= 1)
+                            removed = true;
+
                         if(nodesToRemove[i] != ' ')
                         {
                             value += nodesToRemove[i];
@@ -578,12 +584,12 @@ int main(int argc, char *argv[])
                         else
                         {
                             removeKey(root, stoi(value));
+                            numberOfNodes--;
 
                             value = "";
                         }
 
-                        if(numberOfNodes < 0)
-                            removed = true;
+                        cout<<numberOfNodes<<endl;
 
                         if(i == nodesToRemove.length() - 1 && nodesToRemove[i] != ' ' && !removed)
                         {
@@ -626,11 +632,7 @@ int main(int argc, char *argv[])
         else
             cout<<"Error"<<endl;
 
-    //}
-    //else
-        //cout<<"Error"<<endl;
-
-    //TODO: Repair Remove command, repair args, args from command line <<<
+    //TODO: repair args, args from command line <<<
 
     return 0;
 }
