@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <algorithm>
+#include <fstream>
 
 using namespace std;
 
@@ -393,8 +394,6 @@ int main(int argc, char *argv[])
                 cout<<"node>";
                 cin>>numberOfNodes;
 
-                cout<<numberOfNodes<<endl;
-
                 nodes = new int[numberOfNodes];
 
                 n = nodes;
@@ -442,8 +441,6 @@ int main(int argc, char *argv[])
                 }
 
                 cout<<endl;
-                
-                int m = 0;
 
                 for(int i = 0; i < numberOfNodes; i++)
                 {
@@ -534,13 +531,13 @@ int main(int argc, char *argv[])
                 if(command == "Help")
                 {
                     cout<<"Help"<<"                     "<<"Show this message"<<endl;
-                    cout<<"FindMinMax"<<"                     "<<"Show this message"<<endl;
-                    cout<<"Print"<<"                     "<<"Show this message"<<endl;
-                    cout<<"Remove"<<"                     "<<"Show this message"<<endl;
-                    cout<<"Delete"<<"                     "<<"Show this message"<<endl;
-                    cout<<"Export"<<"                     "<<"Show this message"<<endl;
-                    cout<<"Rebalance"<<"                     "<<"Show this message"<<endl;
-                    cout<<"Exit"<<"                     "<<"Show this message"<<endl;
+                    cout<<"FindMinMax"<<"                     "<<"Find min max"<<endl;
+                    cout<<"Print"<<"                     "<<"print tree inorder, postorder, preorder"<<endl;
+                    cout<<"Remove"<<"                     "<<"Remove element from tree"<<endl;
+                    cout<<"Delete"<<"                     "<<"Delete whole tree"<<endl;
+                    cout<<"Export"<<"                     "<<"Export tzpicture"<<endl;
+                    cout<<"Rebalance"<<"                     "<<"Rebalance tree"<<endl;
+                    cout<<"Exit"<<"                     "<<"Exit"<<endl;
 
                 }
                 if(command == "Print")
@@ -572,8 +569,6 @@ int main(int argc, char *argv[])
                             value = "";
                         }
 
-                        cout<<numberOfNodes<<endl;
-
                         if(i == nodesToRemove.length() - 1 && nodesToRemove[i] != ' ' && !removed)
                         {
                             root = removeKey(root, stoi(value));
@@ -603,7 +598,17 @@ int main(int argc, char *argv[])
                 if(command == "FindMinMax")
                     findMinMax(root);
                 if(command == "Export" && !removed)
-                    cout<<exportTree(root)<<endl;
+                {
+                    string exportResult = exportTree(root);
+                    cout<<exportResult<<endl;
+
+                    fstream file;
+
+                    file.open("exportResult.txt", ios::out);
+
+                    file<<exportResult<<endl;
+
+                }                
                 if(command == "Rebalance" && !removed)
                     root = balanceTree(root);
                 if(command == "Exit")
