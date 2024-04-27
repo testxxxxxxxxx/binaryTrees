@@ -6,12 +6,14 @@
 #include <string.h>
 #include <algorithm>
 #include <fstream>
+#include <time.h>
 
 using namespace std;
 
 int maxValue = 0; 
 int minValue = 0;
 bool removed = false;
+double timePrint = 0.0;
 
 struct Node {
     int key;
@@ -202,8 +204,18 @@ void postOrder(Node* root) {
 void print(Node *root)
 {
     cout<<"In-order: ";
+
+    clock_t startPrint = clock();
+
     if(!removed)
         inOrder(root);
+
+    clock_t stopPrint = clock();
+
+    timePrint = (stopPrint - startPrint) / CLOCKS_PER_SEC;
+
+    cout<<"timePrint: "<<timePrint<<endl;
+
     cout<<endl;
     cout<<"Post-order: ";
     if(!removed)
@@ -379,6 +391,14 @@ int main(int argc, char *argv[])
         return 0;
     }
 
+    string path = "/home/marcin/projects/project_2/benchmark_results/";
+    string name = "test";
+    string dir = path + name;
+
+    fstream benchmarkResults;
+
+    benchmarkResults.open(dir, ios::out | ios::app);
+
         if(strcmp(argv[1], "--tree") == 0)
         {
             int numberOfNodes = 0;
@@ -431,6 +451,8 @@ int main(int argc, char *argv[])
 
                 }
 
+                clock_t startAVL = clock();
+
                 sort(nodes, nodes + numberOfNodes);
 
                 cout<<"sorted: ";
@@ -447,6 +469,14 @@ int main(int argc, char *argv[])
                     root = insertAVL(root, nodes[i]);
 
                 }
+
+                clock_t stopAVL = clock();
+
+                double timeAVL = (stopAVL - startAVL) / CLOCKS_PER_SEC;
+
+                cout<<"timeAVL: "<<timeAVL<<endl;
+
+                benchmarkResults<<"createAVLTree;"<<to_string(numberOfNodes)+";"<<to_string(timeAVL)<<endl;
 
             }
             else if(strcmp(argv[2], "BST") == 0)
@@ -510,7 +540,17 @@ int main(int argc, char *argv[])
 
                 cout<<endl;
 
+                clock_t startBST = clock();
+
                 root = constructBinarySearchTree(nodes, numberOfNodes);
+
+                clock_t stopBST = clock();
+
+                double timeBST = (stopBST - startBST) / CLOCKS_PER_SEC;
+
+                cout<<"timeBST: "<<timeBST<<endl;
+
+                benchmarkResults<<"createBSTTree;"<<to_string(numberOfNodes)+";"<<to_string(timeBST)<<endl;
 
             }
             else
@@ -541,7 +581,11 @@ int main(int argc, char *argv[])
 
                 }
                 if(command == "Print")
+                {
                     print(root);
+
+                    benchmarkResults<<"Inorder;"<<to_string(numberOfNodes)+";"<<to_string(timePrint)<<endl;
+                }
                 if(command == "Remove")
                 {
                     string nodesToRemove = "";
@@ -596,7 +640,20 @@ int main(int argc, char *argv[])
 
                 }
                 if(command == "FindMinMax")
+                {
+                    clock_t startFindMinMax = clock();
+
                     findMinMax(root);
+
+                    clock_t stopFindMinMax = clock();
+
+                    double timeFindMinMax = (stopFindMinMax - startFindMinMax) / CLOCKS_PER_SEC;
+
+                    cout<<"timeFindMinMax: "<<timeFindMinMax<<endl;
+
+                    benchmarkResults<<"FindMinMax;"<<to_string(numberOfNodes)+";"<<to_string(timeFindMinMax)<<endl;
+
+                }
                 if(command == "Export" && !removed)
                 {
                     string exportResult = exportTree(root);
@@ -610,7 +667,20 @@ int main(int argc, char *argv[])
 
                 }                
                 if(command == "Rebalance" && !removed)
+                {
+                    clock_t startRebalance = clock();
+
                     root = balanceTree(root);
+
+                    clock_t stopRebalance = clock();
+
+                    double timeRebalance = (stopRebalance - startRebalance) / CLOCKS_PER_SEC;
+
+                    cout<<"timeRebalance: "<<timeRebalance<<endl;
+
+                    benchmarkResults<<"RebalanceTree;"<<to_string(numberOfNodes)+";"<<to_string(timeRebalance)<<endl;
+
+                }
                 if(command == "Exit")
                     return 0;
 
