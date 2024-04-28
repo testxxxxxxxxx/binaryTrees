@@ -11,13 +11,20 @@ def findArr(arr: list, value: int) -> bool:
 
 class File():
 
-    def __init__(self, path: str, name: str) -> None:
+    def __init__(self, path: str, name: str, treeType: str) -> None:
 
         self.__path = path
         self.__name = name
-        self.__dir = path + name
+        self.__type = treeType
+
+        self.__dir = ''
 
     def save(self, data: list) -> None:
+
+        if self.__type == 'BST':
+            self.__name += '_BST'
+
+        self.__dir = self.__path + self.__name
 
         with open(self.__dir, 'w') as f:
 
@@ -29,7 +36,15 @@ class File():
 
                 result += str(i) + ' '
 
-            f.write(result)
+            f.write(result + '\n')
+
+            if self.__type == 'AVL':
+                f.write('FindMinMax\n')
+                f.write('Print\n')
+                f.write('Exit')
+            elif self.__type == 'BST':
+                f.write('Rebalance\n')
+                f.write('Exit')
 
 class NumberGenerator():
 
@@ -57,13 +72,18 @@ def main() -> None:
     path: str = './benchmark_data_trees/'
     name: str = ''
 
-    for i in range(1 , 18):
+    for i in range(1 , 20):
 
         name = str(i)
-        numbers: list = numberGenerator.generate(pow(2, i) ,pow(2, 17))
+        numbers: list = numberGenerator.generate(pow(2, i) ,pow(2, 20))
 
-        file: File = File(path, name)
+        file: File = File(path, name, 'AVL')
         file.save(numbers)
+
+        file0: File = File(path, name, 'BST')
+        file0.save(numbers)
+
+
 
 if __name__ == "__main__":
     main()

@@ -6,14 +6,14 @@
 #include <string.h>
 #include <algorithm>
 #include <fstream>
-#include <time.h>
+#include <chrono>
 
 using namespace std;
 
 int maxValue = 0; 
 int minValue = 0;
 bool removed = false;
-double timePrint = 0.0;
+chrono::milliseconds timePrint;
 
 struct Node {
     int key;
@@ -205,16 +205,16 @@ void print(Node *root)
 {
     cout<<"In-order: ";
 
-    clock_t startPrint = clock();
+    auto startPrint = chrono::high_resolution_clock::now();
 
     if(!removed)
         inOrder(root);
 
-    clock_t stopPrint = clock();
+    auto stopPrint = chrono::high_resolution_clock::now();
 
-    timePrint = (stopPrint - startPrint) / CLOCKS_PER_SEC;
+    timePrint = chrono::duration_cast<chrono::milliseconds>(stopPrint - startPrint);
 
-    cout<<"timePrint: "<<timePrint<<endl;
+    cout<<"timePrint: "<<timePrint.count()<<endl;
 
     cout<<endl;
     cout<<"Post-order: ";
@@ -392,7 +392,7 @@ int main(int argc, char *argv[])
     }
 
     string path = "/home/marcin/projects/project_2/benchmark_results/";
-    string name = "test";
+    string name = "benchmark_results.csv";
     string dir = path + name;
 
     fstream benchmarkResults;
@@ -451,7 +451,7 @@ int main(int argc, char *argv[])
 
                 }
 
-                clock_t startAVL = clock();
+                auto startAVL = chrono::high_resolution_clock::now();
 
                 sort(nodes, nodes + numberOfNodes);
 
@@ -470,13 +470,13 @@ int main(int argc, char *argv[])
 
                 }
 
-                clock_t stopAVL = clock();
+                auto stopAVL = chrono::high_resolution_clock::now();
 
-                double timeAVL = (stopAVL - startAVL) / CLOCKS_PER_SEC;
+                auto timeAVL = chrono::duration_cast<chrono::milliseconds>(stopAVL - startAVL);
 
-                cout<<"timeAVL: "<<timeAVL<<endl;
+                cout<<"timeAVL: "<<timeAVL.count()<<endl;
 
-                benchmarkResults<<"createAVLTree;"<<to_string(numberOfNodes)+";"<<to_string(timeAVL)<<endl;
+                benchmarkResults<<"createAVLTree;"<<to_string(numberOfNodes)+";"<<to_string(timeAVL.count())<<endl;
 
             }
             else if(strcmp(argv[2], "BST") == 0)
@@ -540,17 +540,17 @@ int main(int argc, char *argv[])
 
                 cout<<endl;
 
-                clock_t startBST = clock();
+                auto startBST = chrono::high_resolution_clock::now();
 
                 root = constructBinarySearchTree(nodes, numberOfNodes);
 
-                clock_t stopBST = clock();
+                auto stopBST = chrono::high_resolution_clock::now();
 
-                double timeBST = (stopBST - startBST) / CLOCKS_PER_SEC;
+                auto timeBST = chrono::duration_cast<chrono::milliseconds>(stopBST - startBST);
 
-                cout<<"timeBST: "<<timeBST<<endl;
+                cout<<"timeBST: "<<timeBST.count()<<endl;
 
-                benchmarkResults<<"createBSTTree;"<<to_string(numberOfNodes)+";"<<to_string(timeBST)<<endl;
+                benchmarkResults<<"createBSTTree;"<<to_string(numberOfNodes)+";"<<to_string(timeBST.count())<<endl;
 
             }
             else
@@ -584,7 +584,7 @@ int main(int argc, char *argv[])
                 {
                     print(root);
 
-                    benchmarkResults<<"Inorder;"<<to_string(numberOfNodes)+";"<<to_string(timePrint)<<endl;
+                    benchmarkResults<<"Inorder;"<<to_string(numberOfNodes)+";"<<to_string(timePrint.count())<<endl;
                 }
                 if(command == "Remove")
                 {
@@ -641,17 +641,17 @@ int main(int argc, char *argv[])
                 }
                 if(command == "FindMinMax")
                 {
-                    clock_t startFindMinMax = clock();
+                    auto startFindMinMax = chrono::high_resolution_clock::now();
 
                     findMinMax(root);
 
-                    clock_t stopFindMinMax = clock();
+                    auto stopFindMinMax = chrono::high_resolution_clock::now();
 
-                    double timeFindMinMax = (stopFindMinMax - startFindMinMax) / CLOCKS_PER_SEC;
+                    auto timeFindMinMax = chrono::duration_cast<chrono::milliseconds>(stopFindMinMax - startFindMinMax);
 
-                    cout<<"timeFindMinMax: "<<timeFindMinMax<<endl;
+                    cout<<"timeFindMinMax: "<<timeFindMinMax.count()<<endl;
 
-                    benchmarkResults<<"FindMinMax;"<<to_string(numberOfNodes)+";"<<to_string(timeFindMinMax)<<endl;
+                    benchmarkResults<<"FindMinMax;"<<to_string(numberOfNodes)+";"<<to_string(timeFindMinMax.count())<<endl;
 
                 }
                 if(command == "Export" && !removed)
@@ -668,17 +668,17 @@ int main(int argc, char *argv[])
                 }                
                 if(command == "Rebalance" && !removed)
                 {
-                    clock_t startRebalance = clock();
+                    auto startRebalance = chrono::high_resolution_clock::now();
 
                     root = balanceTree(root);
 
-                    clock_t stopRebalance = clock();
+                    auto stopRebalance = chrono::high_resolution_clock::now();
 
-                    double timeRebalance = (stopRebalance - startRebalance) / CLOCKS_PER_SEC;
+                    auto timeRebalance = chrono::duration_cast<chrono::milliseconds>(stopRebalance - startRebalance);
 
-                    cout<<"timeRebalance: "<<timeRebalance<<endl;
+                    cout<<"timeRebalance: "<<timeRebalance.count()<<endl;
 
-                    benchmarkResults<<"RebalanceTree;"<<to_string(numberOfNodes)+";"<<to_string(timeRebalance)<<endl;
+                    benchmarkResults<<"RebalanceTree;"<<to_string(numberOfNodes)+";"<<to_string(timeRebalance.count())<<endl;
 
                 }
                 if(command == "Exit")
