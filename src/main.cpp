@@ -391,7 +391,7 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    string path = "/home/marcin/projects/project_2/benchmark_results/";
+    string path = "/home/tomasz/projects/binaryTrees/benchmark_results/";
     string name = "benchmark_results.csv";
     string dir = path + name;
 
@@ -584,7 +584,7 @@ int main(int argc, char *argv[])
                 {
                     print(root);
 
-                    benchmarkResults<<"Inorder;"<<to_string(numberOfNodes)+";"<<to_string(timePrint.count())<<endl;
+                    benchmarkResults<<"Inorder"+(string)argv[2]+";"<<to_string(numberOfNodes)+";"<<to_string(timePrint.count())<<endl;
                 }
                 if(command == "Remove")
                 {
@@ -651,7 +651,7 @@ int main(int argc, char *argv[])
 
                     cout<<"timeFindMinMax: "<<timeFindMinMax.count()<<endl;
 
-                    benchmarkResults<<"FindMinMax;"<<to_string(numberOfNodes)+";"<<to_string(timeFindMinMax.count())<<endl;
+                    benchmarkResults<<"FindMinMax"+(string)argv[2]+";"<<to_string(numberOfNodes)+";"<<to_string(timeFindMinMax.count())<<endl;
 
                 }
                 if(command == "Export" && !removed)
@@ -678,7 +678,7 @@ int main(int argc, char *argv[])
 
                     cout<<"timeRebalance: "<<timeRebalance.count()<<endl;
 
-                    benchmarkResults<<"RebalanceTree;"<<to_string(numberOfNodes)+";"<<to_string(timeRebalance.count())<<endl;
+                    benchmarkResults<<"RebalanceTree"+(string)argv[2]+";"<<to_string(numberOfNodes)+";"<<to_string(timeRebalance.count())<<endl;
 
                 }
                 if(command == "Exit")

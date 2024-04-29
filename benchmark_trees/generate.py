@@ -43,6 +43,8 @@ class File():
                 f.write('Print\n')
                 f.write('Exit')
             elif self.__type == 'BST':
+                f.write('FindMinMax\n')
+                f.write('Print\n')
                 f.write('Rebalance\n')
                 f.write('Exit')
 
